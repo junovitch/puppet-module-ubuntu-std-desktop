@@ -1,0 +1,72 @@
+As of 22 May 13, this is an example of how files are laid out within this directory.
+.
+|-- common
+|   |-- etc
+|   |   |-- cron.daily
+|   |   |   `-- accountSync.sh
+|   |   |-- default
+|   |   |   `-- nfs-common
+|   |   |-- fuse.conf
+|   |   |-- idmapd.conf
+|   |   |-- pam.d
+|   |   |   `-- common-session
+|   |   |-- security
+|   |   |   |-- pam_encfs.conf
+|   |   |   `-- pam_env.conf
+|   |   |-- skel
+|   |   `-- ssh
+|   |       `-- sshd_config
+|   |-- root
+|   |-- usr
+|   |   |-- bin
+|   |   |   |-- truecrypt
+|   |   |   `-- truecrypt-uninstall.sh
+|   |   |-- lib64
+|   |   |   `-- libaacs.so.0
+|   |   |-- local
+|   |   |   |-- bin
+|   |   |   |   `-- kvm.pl
+|   |   |   |-- lib
+|   |   |   |   `-- pcsc
+|   |   |   |       `-- drivers
+|   |   |   |           `-- scmccid.bundle -> /usr/local/pcsc/drivers/scmccid.bundle
+|   |   |   |-- pcsc
+|   |   |   |   `-- drivers
+|   |   |   |       `-- scmccid.bundle
+|   |   |   |           `-- Contents
+|   |   |   |               |-- Info.plist
+|   |   |   |               `-- Linux
+|   |   |   |                   `-- libscmccid.so.5.0.21
+|   |   |   |-- puppet-pkgs
+|   |   |   |   |-- cackey_0.6.5-1_amd64.deb
+|   |   |   |   |-- firefox_extensions-dod_configuration-1.3.6.xpi
+|   |   |   |   |-- google-chrome-beta_current_amd64.deb
+|   |   |   |   |-- google-earth-stable_current_amd64.deb
+|   |   |   |   |-- scmccid_linux_64bit_driver_V5.0.21.tar.gz
+|   |   |   |   |-- setup_printers.sh
+|   |   |   |   |-- steam.deb
+|   |   |   |   `-- truecrypt-7.1a-linux-x64.tar.gz
+|   |   |   `-- scm
+|   |   |       `-- ini
+|   |   |           `-- scmccid.ini
+|   |   `-- share
+|   |       |-- applications
+|   |       |   `-- truecrypt.desktop
+|   |       |-- pixmaps
+|   |       |   `-- truecrypt.xpm
+|   |       `-- truecrypt
+|   |           `-- doc
+|   |               |-- License.txt
+|   |               `-- TrueCrypt\ User\ Guide.pdf
+|   `-- var
+|       `-- lib
+|           `-- AccountsService
+|               `-- icons
+|-- coolermaster
+|   `-- etc
+|       |-- auto.home
+|       `-- auto.master
+`-- silverstone
+    `-- etc
+        `-- cron.daily
+            `-- rollingsnap
