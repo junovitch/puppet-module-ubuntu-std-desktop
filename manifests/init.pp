@@ -54,14 +54,12 @@
 # adding the PPA. It will pick up the PPA and install during the next catalog
 # run.
 #
-# As of writing both Google Chrome and Google Earth will be manually installed
+# As of writing Google Earth will be manually installed
 # from a *.deb package after the first run.  Assuming the files are in place
 # on the puppetmaster, they will be downloaded to the host to be installed by
-# hand. Google Chrome also needs the Beta Version as of writing on 13.04
-# because of a 'libudev0' dependency on Ubuntu 13.04.
+# hand.
 #
 # cd /usr/local/puppet-pkgs
-# dpkg -i google-chrome-beta_current_amd64.deb
 # dpkg -i google-earth-stable_current_amd64.deb
 # apt-get -f install
 #
@@ -79,6 +77,10 @@ class ubuntu1304 {
     ensure     => latest,
   }
   package { 'google-chrome-beta':
+    ensure     => absent,
+    before     => Package['google-chrome-stable'],
+  }
+  package { 'google-chrome-stable':
     ensure     => latest,
   }
   apt::ppa { 'ppa:stebbins/handbrake-snapshots': }
