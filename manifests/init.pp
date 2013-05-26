@@ -809,8 +809,11 @@ class ubuntu1304 {
   # Scripts present on all systems
   ##############################################################################
 
-  file { '/usr/local/bin/kvm.pl':
-    source     => 'puppet:///modules/ubuntu1304/common/usr/local/bin/kvm.pl',
+  file { '/usr/local/bin':
+    ensure     => directory,
+    recurse    => true,
+    purge      => false,
+    source     => 'puppet:///modules/ubuntu1304/common/usr/local/bin',
     owner      => root,
     group      => root,
     mode       => '0755',
