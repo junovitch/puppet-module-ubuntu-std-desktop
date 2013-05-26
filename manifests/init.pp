@@ -69,6 +69,15 @@
 class ubuntu1304 {
 
   ##############################################################################
+  # Set defaults for all Files
+  ##############################################################################
+
+  File {
+    owner      => root,
+    group      => root,
+  }
+
+  ##############################################################################
   # Security sensitive and snapshot repositories.  These are always the latest
   # for security reasons or because they change so fast.
   ##############################################################################
@@ -181,29 +190,22 @@ class ubuntu1304 {
   }
   file { '/etc/fuse.conf':
     source     => 'puppet:///modules/ubuntu1304/common/etc/fuse.conf',
-    owner      => root,
     group      => fuse,
     mode       => '0640',
     require    => Package['fuse'],
   }
   file { '/etc/security/pam_env.conf':
     source     => 'puppet:///modules/ubuntu1304/common/etc/security/pam_env.conf',
-    owner      => root,
-    group      => root,
     mode       => '0644',
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
   file { '/etc/security/pam_encfs.conf':
     source     => 'puppet:///modules/ubuntu1304/common/etc/security/pam_encfs.conf',
-    owner      => root,
-    group      => root,
     mode       => '0644',
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
   file { '/etc/pam.d/common-session':
     source     => 'puppet:///modules/ubuntu1304/common/etc/pam.d/common-session',
-    owner      => root,
-    group      => root,
     mode       => '0644',
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
@@ -648,21 +650,15 @@ class ubuntu1304 {
   }
   file { '/usr/lib64/libaacs.so.0':
     source     => 'puppet:///modules/ubuntu1304/common/usr/lib64/libaacs.so.0',
-    owner      => root,
-    group      => root,
     mode       => '0644',
     require    => File['/usr/lib64'],
   }
   file { '/etc/skel/.config':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     mode      => '0755',
   }
   file { '/etc/skel/.config/aacs':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     recurse   => true,
     purge     => true,
     mode      => '0755',
@@ -717,55 +713,39 @@ class ubuntu1304 {
   }
   file { '/etc/ssh/sshd_config':
     source     => 'puppet:///modules/ubuntu1304/common/etc/ssh/sshd_config',
-    owner      => root,
-    group      => root,
     mode       => '0640',
     notify     => Service['ssh'],
     require    => Package['openssh-server'],
   }
   file { '/root/.ssh':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     mode      => '0700',
   }
   file { '/root/.ssh/authorized_keys':
     source     => 'puppet:///modules/ubuntu1304/common/root/.ssh/authorized_keys',
-    owner      => root,
-    group      => root,
     mode       => '0600',
     require    => File['/root/.ssh'],
   }
   file { '/root/.ssh/id_ecdsa':
     source     => "puppet:///modules/ubuntu1304/common/root/.ssh/${hostname}-id_ecdsa",
-    owner      => root,
-    group      => root,
     mode       => '0600',
     require    => File['/root/.ssh'],
   }
   file { '/root/.ssh/id_ecdsa.pub':
     source     => "puppet:///modules/ubuntu1304/common/root/.ssh/${hostname}-id_ecdsa.pub",
-    owner      => root,
-    group      => root,
     mode       => '0644',
     require    => File['/root/.ssh'],
   }
   file { '/root/.unison':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     mode      => '0755',
   }
   file { '/root/.unison/accountSync.prf':
     source     => 'puppet:///modules/ubuntu1304/common/root/.unison/accountSync.prf',
-    owner      => root,
-    group      => root,
     mode       => '0644',
     require    => File['/root/.unison'],
   }
   file { '/etc/cron.daily/accountSync.sh':
-    owner      => root,
-    group      => root,
     mode       => '0755',
     source     => 'puppet:///modules/ubuntu1304/common/etc/cron.daily/accountSync.sh',
   }
@@ -787,15 +767,11 @@ class ubuntu1304 {
     ensure     => installed,
   }
   file { '/etc/idmapd.conf':
-    owner      => root,
-    group      => root,
     mode       => '0644',
     source     => 'puppet:///modules/ubuntu1304/common/etc/idmapd.conf',
     require    => Package['nfs-common'],
   }
   file { '/etc/default/nfs-common':
-    owner      => root,
-    group      => root,
     mode       => '0644',
     source     => 'puppet:///modules/ubuntu1304/common/etc/default/nfs-common',
     require    => Package['nfs-common'],
@@ -807,8 +783,6 @@ class ubuntu1304 {
 
   file { '/var/lib/AccountsService':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     recurse   => true,
     purge     => false,
     mode      => '0644',
@@ -824,8 +798,6 @@ class ubuntu1304 {
     recurse    => true,
     purge      => false,
     source     => 'puppet:///modules/ubuntu1304/common/usr/local/bin',
-    owner      => root,
-    group      => root,
     mode       => '0755',
   }
 
@@ -835,8 +807,6 @@ class ubuntu1304 {
 
   file { '/usr/local/puppet-pkgs':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     recurse   => true,
     purge     => true,
     mode      => '0755',
@@ -861,8 +831,6 @@ class ubuntu1304 {
 
   file { '/usr/lib64':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     mode      => '0755',
   }
   package { 'cackey':
@@ -878,8 +846,6 @@ class ubuntu1304 {
 
   file { '/usr/local/scm':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     recurse   => true,
     purge     => true,
     source    => 'puppet:///modules/ubuntu1304/common/usr/local/scm',
@@ -887,8 +853,6 @@ class ubuntu1304 {
 
   file { '/usr/local/pcsc':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     recurse   => true,
     purge     => true,
     source    => 'puppet:///modules/ubuntu1304/common/usr/local/pcsc',
@@ -896,8 +860,6 @@ class ubuntu1304 {
 
   file { '/usr/local/lib/pcsc':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     recurse   => true,
     purge     => true,
     source    => 'puppet:///modules/ubuntu1304/common/usr/local/lib/pcsc',
@@ -909,36 +871,26 @@ class ubuntu1304 {
 
   file { '/usr/bin/truecrypt':
     source     => 'puppet:///modules/ubuntu1304/common/usr/bin/truecrypt',
-    owner      => root,
-    group      => root,
     mode       => '0755',
   }
 
   file { '/usr/bin/truecrypt-uninstall.sh':
     source     => 'puppet:///modules/ubuntu1304/common/usr/bin/truecrypt-uninstall.sh',
-    owner      => root,
-    group      => root,
     mode       => '0754',
   }
 
   file { '/usr/share/applications/truecrypt.desktop':
     source     => 'puppet:///modules/ubuntu1304/common/usr/share/applications/truecrypt.desktop',
-    owner      => root,
-    group      => root,
     mode       => '0644',
   }
 
   file { '/usr/share/pixmaps/truecrypt.xpm':
     source     => 'puppet:///modules/ubuntu1304/common/usr/share/pixmaps/truecrypt.xpm',
-    owner      => root,
-    group      => root,
     mode       => '0644',
   }
 
   file { '/usr/share/truecrypt':
     ensure    => directory,
-    owner     => root,
-    group     => root,
     recurse   => true,
     purge     => true,
     mode      => '0644',
@@ -973,8 +925,6 @@ class ubuntu1304::silverstone {
   }
 
   file { '/etc/cron.daily/rollingsnap':
-    owner      => root,
-    group      => root,
     mode       => '0755',
     source     => 'puppet:///modules/ubuntu1304/silverstone/etc/cron.daily/rollingsnap',
   }
@@ -987,8 +937,6 @@ class ubuntu1304::coolermaster {
   ##############################################################################
 
   file { '/etc/auto.master':
-    owner      => root,
-    group      => root,
     mode       => '0644',
     source     => 'puppet:///modules/ubuntu1304/coolermaster/etc/auto.master',
     notify     => Service['autofs'],
@@ -996,8 +944,6 @@ class ubuntu1304::coolermaster {
   }
 
   file { '/etc/auto.home':
-    owner      => root,
-    group      => root,
     mode       => '0644',
     source     => 'puppet:///modules/ubuntu1304/coolermaster/etc/auto.home',
     notify     => Service['autofs'],
