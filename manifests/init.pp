@@ -334,6 +334,9 @@ class ubuntu1304 {
   package { 'synaptic':
     ensure     => installed,
   }
+  package { 'traceroute':
+    ensure     => installed,
+  }
   package { 'etherwake':
     ensure     => installed,
   }
