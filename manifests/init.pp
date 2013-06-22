@@ -920,9 +920,45 @@ class ubuntu1304::silverstone {
     ensure     => installed,
   }
 
-  package { 'mediatomb':
+  apt::ppa { 'ppa:happy-neko/ps3mediaserver': }
+  package { 'ps3mediaserver':
     ensure     => installed,
   }
+  file { '/etc/default/ps3mediaserver':
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/default/ps3mediaserver',
+    notify     => Service['ps3mediaserver'],
+    require    => Package['ps3mediaserver'],
+  }
+  file { '/etc/skel/.config/ps3mediaserver/PMS.conf':
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/skel/.config/ps3mediaserver/PMS.conf',
+    require    => Package['ps3mediaserver'],
+  }
+  group { 'ps3mediaserver':
+    ensure     => present,
+    system     => 'true',
+    require    => Package['ps3mediaserver'],
+  }
+  user { 'ps3mediaserver':
+    ensure     => present,
+    system     => 'true',
+    gid        => 'ps3mediaserver',
+    password   => '*',
+    shell      => '/bin/false',
+    home       => '/home/ps3mediaserver',
+    comment    => 'PS3 Media Server User,,,',
+    managehome => true,
+    require    => [ Group['ps3mediaserver'], File['/etc/skel/.config/ps3mediaserver/PMS.conf'], File['/etc/default/ps3mediaserver'] ],
+  }
+  service { 'ps3mediaserver':
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
+    require    => User['ps3mediaserver'],
+  }
+
   package { 'boinc':
     ensure     => installed,
   }
