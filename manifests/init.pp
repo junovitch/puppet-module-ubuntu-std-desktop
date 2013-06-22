@@ -1023,3 +1023,36 @@ class ubuntu1304::coolermaster {
     hasrestart => true,
   }
 }
+
+class ubuntu1304::withopenvpn {
+
+  ##############################################################################
+  # Include OpenVPN configuration Template
+  ##############################################################################
+
+  file { '/etc/openvpn/ca.crt':
+    source     => 'puppet:///modules/ubuntu1304/common/etc/openvpn/ca.crt',
+    mode       => '0644',
+    require    => Package['openvpn'],
+  }
+  file { '/etc/openvpn/ta.key':
+    source     => 'puppet:///modules/ubuntu1304/common/etc/openvpn/ta.key',
+    mode       => '0600',
+    require    => Package['openvpn'],
+  }
+  file { "/etc/openvpn/${hostname}.crt":
+    source     => "puppet:///modules/ubuntu1304/common/etc/openvpn/${hostname}.crt",
+    mode       => '0644',
+    require    => Package['openvpn'],
+  }
+  file { "/etc/openvpn/${hostname}.key":
+    source     => "puppet:///modules/ubuntu1304/common/etc/openvpn/${hostname}.key",
+    mode       => '0600',
+    require    => Package['openvpn'],
+  }
+  file { '/etc/openvpn/unovpn.conf':
+    content    => template('ubuntu1304/etc/openvpn/unovpn.conf.erb'),
+    mode       => '0600',
+    require    => [ Package['openvpn'], File["/etc/openvpn/${hostname}.crt"], File["/etc/openvpn/${hostname}.key"] ],
+  }
+}
