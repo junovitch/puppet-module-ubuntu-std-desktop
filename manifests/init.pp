@@ -351,6 +351,24 @@ class ubuntu1304 {
   package { 'build-essential':
     ensure     => installed,
   }
+  package { 'byobu':
+    ensure     => installed,
+  }
+  package { 'bzr':
+    ensure     => installed,
+  }
+  package { 'bzr-explorer':
+    ensure     => installed,
+  }
+  package { 'bzr-git':
+    ensure     => installed,
+  }
+  package { 'charm-tools':
+    ensure     => installed,
+  }
+  package { 'charm-helper-sh':
+    ensure     => installed,
+  }
   package { 'check':
     ensure     => installed,
   }
@@ -382,6 +400,15 @@ class ubuntu1304 {
     ensure     => installed,
   }
   package { 'git-core':
+    ensure     => installed,
+  }
+  package { 'juju':
+    ensure     => installed,
+  }
+  package { 'kexec-tools':
+    ensure     => installed,
+  }
+  package { 'meld':
     ensure     => installed,
   }
   package { 'perl-tk':
