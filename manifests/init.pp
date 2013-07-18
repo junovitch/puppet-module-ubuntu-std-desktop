@@ -93,6 +93,9 @@ class ubuntu1304 {
     ensure     => latest,
   }
   apt::ppa { 'ppa:stebbins/handbrake-snapshots': }
+  package { 'handbrake-cli':
+    ensure     => latest,
+  }
   package { 'handbrake-gtk':
     ensure     => latest,
   }
@@ -144,6 +147,9 @@ class ubuntu1304 {
     ensure     => installed,
   }
   package { 'gufw':
+    ensure     => installed,
+  }
+  package { 'hping3':
     ensure     => installed,
   }
   package { 'kismet':
@@ -656,7 +662,7 @@ class ubuntu1304 {
   }
 
   ##############################################################################
-  # Codecs
+  # Codecs and build library requirements for MakeMKV
   # Notes for Blu-ray:  http://vlc-bluray.whoknowsmy.name/
   ##############################################################################
 
@@ -667,6 +673,21 @@ class ubuntu1304 {
     ensure     => installed,
   }
   package { 'lame':
+    ensure     => installed,
+  }
+  package { 'libc6-dev':
+    ensure     => installed,
+  }
+  package { 'libexpat1-dev':
+    ensure     => installed,
+  }
+  package { 'libgl1-mesa-dev':
+    ensure     => installed,
+  }
+  package { 'libssl-dev':
+    ensure     => installed,
+  }
+  package { 'libqt4-dev':
     ensure     => installed,
   }
   package { 'libmad0':
@@ -832,6 +853,16 @@ class ubuntu1304 {
   }
 
   ##############################################################################
+  # LightDM conf to set Cinnamon as default and make login/logout scripts hot
+  ##############################################################################
+
+  file { '/etc/lightdm/lightdm.conf':
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm.conf',
+    require    => [ File['/usr/local/bin'], Package['cinnamon'] ],
+  }
+
+  ##############################################################################
   # Local puppet installation files
   ##############################################################################
 
@@ -964,12 +995,12 @@ class ubuntu1304::silverstone {
   }
   group { 'ps3mediaserver':
     ensure     => present,
-    system     => 'true',
+    system     => true,
     require    => Package['ps3mediaserver'],
   }
   user { 'ps3mediaserver':
     ensure     => present,
-    system     => 'true',
+    system     => true,
     gid        => 'ps3mediaserver',
     password   => '*',
     shell      => '/bin/false',
