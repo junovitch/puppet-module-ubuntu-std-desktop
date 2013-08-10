@@ -82,42 +82,15 @@ class ubuntu1304 {
   # for security reasons or because they change so fast.
   ##############################################################################
 
-  package { 'firefox':
-    ensure     => latest,
-  }
-  package { 'google-chrome-beta':
-    ensure     => absent,
-    before     => Package['google-chrome-stable'],
-  }
-  package { 'google-chrome-stable':
-    ensure     => latest,
-  }
   apt::ppa { 'ppa:stebbins/handbrake-snapshots': }
-  package { 'handbrake-cli':
-    ensure     => latest,
-  }
-  package { 'handbrake-gtk':
-    ensure     => latest,
-  }
-  package { 'icedtea-plugin':
-    ensure     => latest,
-  }
-  package { 'icedtea-7-plugin':
-    ensure     => latest,
-  }
-  package { 'openjdk-7-jre':
-    ensure     => latest,
-  }
-  package { 'skype':
-    ensure     => latest,
-  }
-  package { 'thunderbird':
-    ensure     => latest,
-  }
-  package { 'ubuntu-restricted-addons':
-    ensure     => latest,
-  }
-  package { 'ubuntu-restricted-extras':
+  package { [
+      'firefox',
+      'google-chrome-stable',
+      'handbrake-cli', 'handbrake-gtk',
+      'icedtea-plugin', 'icedtea-7-plugin', 'openjdk-7-jre',
+      'skype',
+      'thunderbird',
+      'ubuntu-restricted-addons', 'ubuntu-restricted-extras', ]:
     ensure     => latest,
   }
 
@@ -125,55 +98,22 @@ class ubuntu1304 {
   # General Security tools
   ##############################################################################
 
-  package { 'apparmor-profiles':
-    ensure     => installed,
-  }
-  package { 'bleachbit':
-    ensure     => installed,
-  }
-  package { 'chkrootkit':
-    ensure     => installed,
-  }
-  package { 'clamav':
-    ensure     => installed,
-  }
-  package { 'clamtk':
-    ensure     => installed,
-  }
-  package { 'ecryptfs-utils':
-    ensure     => installed,
-  }
-  package { 'fail2ban':
-    ensure     => installed,
-  }
-  package { 'gufw':
-    ensure     => installed,
-  }
-  package { 'hping3':
-    ensure     => installed,
-  }
-  package { 'kismet':
-    ensure     => installed,
-  }
-  package { 'nmap':
-    ensure     => installed,
-  }
-  package { 'openvpn':
-    ensure     => installed,
-  }
-  package { 'putty':
-    ensure     => installed,
-  }
-  package { 'sockstat':
-    ensure     => installed,
-  }
-  package { 'tshark':
-    ensure     => installed,
-  }
-  package { 'wireshark':
-    ensure     => installed,
-  }
-  package { 'wireshark-doc':
+  package { [
+      'apparmor-profiles',
+      'bleachbit',
+      'chkrootkit',
+      'clamav', 'clamtk',
+      'ecryptfs-utils',
+      'fail2ban',
+      'gufw',
+      'hping3',
+      'kismet',
+      'nmap',
+      'openvpn',
+      'putty',
+      'sockstat',
+      'tshark',
+      'wireshark', 'wireshark-doc', ]:
     ensure     => installed,
   }
 
@@ -182,16 +122,7 @@ class ubuntu1304 {
   # http://wiki.debian.org/TransparentEncryptionForHomeFolder
   ##############################################################################
 
-  package { 'fuse':
-    ensure     => installed,
-  }
-  package { 'encfs':
-    ensure     => installed,
-  }
-  package { 'libpam-encfs':
-    ensure     => installed,
-  }
-  package { 'libpam-mount':
+  package { [ 'fuse', 'encfs', 'libpam-encfs', 'libpam-mount', ]:
     ensure     => installed,
   }
   file { '/etc/fuse.conf':
@@ -220,13 +151,9 @@ class ubuntu1304 {
   # Games
   ##############################################################################
 
-  package { 'playonlinux':
-    ensure     => installed,
-  }
-  package { 'openttd':
-    ensure     => installed,
-  }
-  package { 'openttd-opensfx':
+  package { [
+      'playonlinux',
+      'openttd', 'openttd-opensfx', ]:
     ensure     => installed,
   }
 
@@ -234,80 +161,29 @@ class ubuntu1304 {
   # Steam + Dependencies
   ##############################################################################
 
-  package { 'curl':
-    ensure     => installed,
-  }
-  package { 'jockey-common':
-    ensure     => installed,
-  }
-  package { 'nvidia-common':
-    ensure     => installed,
-  }
-  package { 'python-xkit':
+  package { [ 'curl', 'jockey-common', 'nvidia-common', 'python-xkit', ]:
     ensure     => installed,
   }
   package { 'steam-launcher':
-    ensure    => installed,
-    provider  => dpkg,
-    source    => '/usr/local/puppet-pkgs/steam.deb',
-    require   => [ Package['curl'], Package['jockey-common'], Package['nvidia-common'], Package['python-xkit'], File['/usr/local/puppet-pkgs'] ],
+    ensure     => installed,
+    provider   => dpkg,
+    source     => '/usr/local/puppet-pkgs/steam.deb',
+    require    => [ Package['curl'], Package['jockey-common'],
+      Package['nvidia-common'], Package['python-xkit'],
+      File['/usr/local/puppet-pkgs'] ],
   }
 
   ##############################################################################
   # Photography Applications
   ##############################################################################
 
-  package { 'gimp':
-    ensure     => installed,
-  }
-  package { 'gimp-data':
-    ensure     => installed,
-  }
-  package { 'gimp-data-extras':
-    ensure     => installed,
-  }
-  package { 'gimp-help-en':
-    ensure     => installed,
-  }
-  package { 'hugin':
-    ensure     => installed,
-  }
-  package { 'mypaint':
-    ensure     => installed,
-  }
-  package { 'pandora':
-    ensure     => installed,
-  }
-  package { 'pinta':
-    ensure     => installed,
-  }
-  package { 'shotwell':
-    ensure     => installed,
-  }
-
-  ##############################################################################
-  # CLI Apps
-  ##############################################################################
-
-  package { 'clusterssh':
-    ensure     => installed,
-  }
-  package { 'htop':
-    ensure     => installed,
-  }
-  package { 'tcsh':
-    ensure     => installed,
-  }
-  package { 'terminator':
-    ensure     => installed,
-  }
-  package { 'tmux':
-    ensure     => installed,
-  }
-  package { 'zsh':
-    ensure     => installed,
-  }
-  package { 'zsh-doc':
+  package { [
+      'gimp', 'gimp-data', 'gimp-data-extras', 'gimp-help-en',
+      'hugin',
+      'mypaint',
+      'pandora',
+      'pinta',
+      'shotwell', ]:
     ensure     => installed,
   }
 
@@ -315,38 +191,24 @@ class ubuntu1304 {
   # System Apps
   ##############################################################################
 
-  package { 'blueman':
-    ensure     => installed,
-  }
-  package { 'gconf-editor':
-    ensure     => installed,
-  }
-  package { 'gddrescue':
-    ensure     => installed,
-  }
-  package { 'gparted':
-    ensure     => installed,
-  }
   apt::ppa { 'ppa:danielrichter2007/grub-customizer': }
-  package { 'grub-customizer':
-    ensure     => installed,
-  }
-  package { 'preload':
-    ensure     => installed,
-  }
-  package { 'remmina':
-    ensure     => installed,
-  }
-  package { 'synaptic':
-    ensure     => installed,
-  }
-  package { 'traceroute':
-    ensure     => installed,
-  }
-  package { 'etherwake':
-    ensure     => installed,
-  }
-  package { 'wakeonlan':
+  package { [
+      'blueman',
+      'clusterssh',
+      'etherwake', 'wakeonlan',
+      'gconf-editor',
+      'gddrescue',
+      'gparted',
+      'grub-customizer',
+      'htop',
+      'preload',
+      'remmina',
+      'synaptic',
+      'tcsh',
+      'terminator',
+      'traceroute',
+      'tmux',
+      'zsh', 'zsh-doc', ]:
     ensure     => installed,
   }
 
@@ -354,100 +216,30 @@ class ubuntu1304 {
   # Development Tools and Applications
   ##############################################################################
 
-  package { 'build-essential':
-    ensure     => installed,
-  }
-  package { 'byobu':
-    ensure     => installed,
-  }
-  package { 'bzr':
-    ensure     => installed,
-  }
-  package { 'bzr-explorer':
-    ensure     => installed,
-  }
-  package { 'bzr-git':
-    ensure     => installed,
-  }
-  package { 'charm-tools':
-    ensure     => installed,
-  }
-  package { 'charm-helper-sh':
-    ensure     => installed,
-  }
-  package { 'check':
-    ensure     => installed,
-  }
-  package { 'checkinstall':
-    ensure     => installed,
-  }
-  package { 'cdbs':
-    ensure     => installed,
-  }
-  package { 'devscripts':
-    ensure     => installed,
-  }
-  package { 'dh-make':
-    ensure     => installed,
-  }
-  package { 'eclipse':
-    ensure     => installed,
-  }
-  package { 'fakeroot':
-    ensure     => installed,
-  }
-  package { 'geany':
-    ensure     => installed,
-  }
-  package { 'geany-plugins':
-    ensure     => installed,
-  }
-  package { 'git':
-    ensure     => installed,
-  }
-  package { 'git-core':
-    ensure     => installed,
-  }
-  package { 'juju':
-    ensure     => installed,
-  }
-  package { 'kexec-tools':
-    ensure     => installed,
-  }
-  package { 'meld':
-    ensure     => installed,
-  }
-  package { 'perl-tk':
-    ensure     => installed,
-  }
-  package { 'qtcreator':
-    ensure     => installed,
-  }
-  package { 'quickly':
-    ensure     => installed,
-  }
-  package { 'subversion':
-    ensure     => installed,
-  }
-  package { 'sharutils':
-    ensure     => installed,
-  }
-  package { 'uudeview':
-    ensure     => installed,
-  }
-  package { 'vim':
-    ensure     => installed,
-  }
-  package { 'vim-gnome':
-    ensure     => installed,
-  }
-  package { 'vim-doc':
-    ensure     => installed,
-  }
-  package { 'vim-scripts':
-    ensure     => installed,
-  }
-  package { 'vim-latexsuite':
+  package { [
+      'build-essential',
+      'byobu',
+      'bzr', 'bzr-explorer', 'bzr-git',
+      'charm-tools', 'charm-helper-sh',
+      'check',
+      'checkinstall',
+      'cdbs',
+      'devscripts',
+      'dh-make',
+      'eclipse',
+      'fakeroot',
+      'geany', 'geany-plugins',
+      'git', 'git-core',
+      'juju',
+      'kexec-tools',
+      'meld',
+      'perl-tk',
+      'qtcreator',
+      'quickly',
+      'subversion',
+      'sharutils',
+      'uudeview',
+      'vim', 'vim-gnome', 'vim-doc', 'vim-scripts', 'vim-latexsuite', ]:
     ensure     => installed,
   }
 
@@ -471,13 +263,7 @@ class ubuntu1304 {
   # Smartcard Support
   ##############################################################################
 
-  package { 'libpcsclite1':
-    ensure     => installed,
-  }
-  package { 'pcscd':
-    ensure     => installed,
-  }
-  package { 'pcsc-tools':
+  package { [ 'libpcsclite1', 'pcscd', 'pcsc-tools', ]:
     ensure     => installed,
   }
 
@@ -485,17 +271,11 @@ class ubuntu1304 {
   # Media Players
   ##############################################################################
 
-  package { 'banshee':
-    ensure     => installed,
-  }
-  package { 'banshee-extension-ampache':
-    ensure     => installed,
-  }
-  package { 'vlc':
-    ensure     => installed,
-  }
   apt::ppa { 'ppa:ehoover/compholio': }
-  package { 'netflix-desktop':
+  package { [
+      'banshee', 'banshee-extension-ampache',
+      'netflix-desktop',
+      'vlc', ]:
     ensure     => installed,
   }
 
@@ -503,25 +283,13 @@ class ubuntu1304 {
   # Audio Tools
   ##############################################################################
 
-  package { 'audacity':
-    ensure     => installed,
-  }
-  package { 'icedax':
-    ensure     => installed,
-  }
-  package { 'id3tool':
-    ensure     => installed,
-  }
-  package { 'id3v2':
-    ensure     => installed,
-  }
-  package { 'pavucontrol':
-    ensure     => installed,
-  }
-  package { 'sox':
-    ensure     => installed,
-  }
-  package { 'tagtool':
+  package { [
+      'audacity',
+      'icedax',
+      'id3tool', 'id3v2',
+      'pavucontrol',
+      'sox',
+      'tagtool', ]:
     ensure     => installed,
   }
 
@@ -529,25 +297,12 @@ class ubuntu1304 {
   # Video Tools
   ##############################################################################
 
-  package { 'blender':
-    ensure     => installed,
-  }
-  package { 'cheese':
-    ensure     => installed,
-  }
-  package { 'devede':
-    ensure     => installed,
-  }
-  package { 'openshot':
-    ensure     => installed,
-  }
-  package { 'openshot-doc':
-    ensure     => installed,
-  }
-  package { 'mkvtoolnix':
-    ensure     => installed,
-  }
-  package { 'mkvtoolnix-gui':
+  package { [
+      'blender',
+      'cheese',
+      'devede',
+      'openshot', 'openshot-doc',
+      'mkvtoolnix', 'mkvtoolnix-gui', ]:
     ensure     => installed,
   }
 
@@ -555,27 +310,15 @@ class ubuntu1304 {
   # Web Applications & Tools
   ##############################################################################
 
-  package { 'bluefish':
+  package { ['bluefish', 'clamz', 'mpack', ]:
     ensure     => installed,
-  }
-  package { 'clamz':
-    ensure     => installed,
-  }
-  package { 'mpack':
-    ensure    => installed,
   }
 
   ##############################################################################
   # Web Communication Apps
   ##############################################################################
 
-  package { 'pidgin':
-    ensure     => installed,
-  }
-  package { 'pidgin-otr':
-    ensure     => installed,
-  }
-  package { 'pidgin-encryption':
+  package { [ 'pidgin', 'pidgin-otr', 'pidgin-encryption', ]:
     ensure     => installed,
   }
 
@@ -583,13 +326,7 @@ class ubuntu1304 {
   # Virtualization
   ##############################################################################
 
-  package { 'virtualbox-qt':
-    ensure     => installed,
-  }
-  package { 'virtualbox-guest-additions-iso':
-    ensure     => installed,
-  }
-  package { 'gns3':
+  package { [ 'virtualbox-qt', 'virtualbox-guest-additions-iso', 'gns3', ]:
     ensure     => installed,
   }
 
@@ -597,10 +334,7 @@ class ubuntu1304 {
   # Document tools
   ##############################################################################
 
-  package { 'lyx':
-    ensure     => installed,
-  }
-  package { 'pdfshuffler':
+  package { [ 'lyx', 'pdfshuffler', ]:
     ensure     => installed,
   }
 
@@ -608,13 +342,7 @@ class ubuntu1304 {
   # Desktop Apps
   ##############################################################################
 
-  package { 'conky-all':
-    ensure     => installed,
-  }
-  package { 'gtk-redshift':
-    ensure     => installed,
-  }
-  package { 'wbar':
+  package { [ 'conky-all', 'gtk-redshift', 'wbar', ]:
     ensure     => installed,
   }
 
@@ -622,10 +350,7 @@ class ubuntu1304 {
   # Google Earth
   ##############################################################################
 
-  package { 'lsb-core':
-    ensure     => installed,
-  }
-  package { 'google-earth-stable':
+  package { [ 'lsb-core', 'google-earth-stable', ]:
     ensure     => installed,
   }
 
@@ -633,31 +358,12 @@ class ubuntu1304 {
   # General File Manipulation Tools
   ##############################################################################
 
-  package { 'cabextract':
-    ensure     => installed,
-  }
-  package { 'mdbtools':
-    ensure     => installed,
-  }
-  package { 'mdbtools-doc':
-    ensure     => installed,
-  }
-  package { 'mdbtools-gmdb':
-    ensure     => installed,
-  }
-  package { 'p7zip-full':
-    ensure     => installed,
-  }
-  package { 'rar':
-    ensure     => installed,
-  }
-  package { 'unrar':
-    ensure     => installed,
-  }
-  package { 'unzip':
-    ensure     => installed,
-  }
-  package { 'zip':
+  package { [
+      'cabextract',
+      'mdbtools', 'mdbtools-doc', 'mdbtools-gmdb',
+      'p7zip-full',
+      'rar', 'unrar',
+      'zip', 'unzip', ]:
     ensure     => installed,
   }
 
@@ -666,37 +372,18 @@ class ubuntu1304 {
   # Notes for Blu-ray:  http://vlc-bluray.whoknowsmy.name/
   ##############################################################################
 
-  package { 'faac':
-    ensure     => installed,
-  }
-  package { 'flac':
-    ensure     => installed,
-  }
-  package { 'lame':
-    ensure     => installed,
-  }
-  package { 'libc6-dev':
-    ensure     => installed,
-  }
-  package { 'libexpat1-dev':
-    ensure     => installed,
-  }
-  package { 'libgl1-mesa-dev':
-    ensure     => installed,
-  }
-  package { 'libssl-dev':
-    ensure     => installed,
-  }
-  package { 'libqt4-dev':
-    ensure     => installed,
-  }
-  package { 'libmad0':
-    ensure     => installed,
-  }
-  package { 'libquicktime2':
-    ensure     => installed,
-  }
-  package { 'totem-mozilla':
+  package { [
+      'faac',
+      'flac',
+      'lame',
+      'libc6-dev',
+      'libexpat1-dev',
+      'libgl1-mesa-dev',
+      'libssl-dev',
+      'libqt4-dev',
+      'libmad0',
+      'libquicktime2',
+      'totem-mozilla', ]:
     ensure     => installed,
   }
   file { '/usr/lib64/libaacs.so.0':
@@ -705,61 +392,42 @@ class ubuntu1304 {
     require    => File['/usr/lib64'],
   }
   file { '/etc/skel/.config':
-    ensure    => directory,
-    mode      => '0755',
+    ensure     => directory,
+    mode       => '0755',
   }
   file { '/etc/skel/.config/aacs':
-    ensure    => directory,
-    recurse   => true,
-    purge     => true,
-    mode      => '0755',
-    source    => 'puppet:///modules/ubuntu1304/common/etc/skel/.config/aacs',
-    require   => File['/etc/skel/.config'],
+    ensure     => directory,
+    recurse    => true,
+    purge      => true,
+    mode       => '0755',
+    source     => 'puppet:///modules/ubuntu1304/common/etc/skel/.config/aacs',
+    require    => File['/etc/skel/.config'],
   }
 
   ##############################################################################
   # Alternate Desktops
   ##############################################################################
 
-  package { 'cinnamon':
+  package { [ 'cinnamon', 'kde-standard', 'xfce4', ]:
     ensure     => installed,
   }
-  package { 'kde-plasma-desktop':
-    ensure     => installed,
-  }
-  package { 'unity':
-    ensure     => installed,
-  }
-  package { 'unity-tweak-tool':
+  package { [ 'unity', 'unity-tweak-tool', ]:
     ensure     => installed,
   }
   package { 'unity-lens-shopping':
     ensure     => absent,
-  }
-  package { 'xfce4':
-    ensure     => installed,
   }
 
   ##############################################################################
   # OpenSSH Server, Unison, and associated configurations
   ##############################################################################
 
-  package { 'openssh-server':
-    ensure     => installed,
-  }
-  package { 'openssh-blacklist':
-    ensure     => installed,
-  }
-  package { 'openssh-blacklist-extra':
-    ensure     => installed,
-  }
-  package { 'ssh-import-id':
-    ensure     => installed,
-  }
-  package { 'unison':
-    ensure     => installed,
-  }
-  package { 'unison-gtk':
+  package { [
+      'openssh-server',
+      'openssh-blacklist',
+      'openssh-blacklist-extra',
+      'ssh-import-id',
+      'unison', 'unison-gtk', ]:
     ensure     => installed,
   }
   file { '/etc/ssh/sshd_config':
@@ -769,8 +437,8 @@ class ubuntu1304 {
     require    => Package['openssh-server'],
   }
   file { '/root/.ssh':
-    ensure    => directory,
-    mode      => '0700',
+    ensure     => directory,
+    mode       => '0700',
   }
   file { '/root/.ssh/authorized_keys':
     source     => 'puppet:///modules/ubuntu1304/common/root/.ssh/authorized_keys',
@@ -788,8 +456,8 @@ class ubuntu1304 {
     require    => File['/root/.ssh'],
   }
   file { '/root/.unison':
-    ensure    => directory,
-    mode      => '0755',
+    ensure     => directory,
+    mode       => '0755',
   }
   file { '/root/.unison/accountSync.prf':
     source     => 'puppet:///modules/ubuntu1304/common/root/.unison/accountSync.prf',
@@ -811,16 +479,20 @@ class ubuntu1304 {
   # NFS client and Autofs with associated configurations
   ##############################################################################
 
-  package { 'nfs-common':
-    ensure     => installed,
-  }
-  package { 'autofs':
+  package { [ 'nfs-common', 'autofs', ]:
     ensure     => installed,
   }
   file { '/etc/idmapd.conf':
     mode       => '0644',
     source     => 'puppet:///modules/ubuntu1304/common/etc/idmapd.conf',
+    notify     => Service['idmapd'],
     require    => Package['nfs-common'],
+  }
+  service { 'idmapd':
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
   }
   file { '/etc/default/nfs-common':
     mode       => '0644',
@@ -833,11 +505,11 @@ class ubuntu1304 {
   ##############################################################################
 
   file { '/var/lib/AccountsService':
-    ensure    => directory,
-    recurse   => true,
-    purge     => false,
-    mode      => '0644',
-    source    => 'puppet:///modules/ubuntu1304/common/var/lib/AccountsService',
+    ensure     => directory,
+    recurse    => true,
+    purge      => false,
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu1304/common/var/lib/AccountsService',
   }
 
   ##############################################################################
@@ -867,11 +539,11 @@ class ubuntu1304 {
   ##############################################################################
 
   file { '/usr/local/puppet-pkgs':
-    ensure    => directory,
-    recurse   => true,
-    purge     => true,
-    mode      => '0755',
-    source    => 'puppet:///modules/ubuntu1304/common/usr/local/puppet-pkgs',
+    ensure     => directory,
+    recurse    => true,
+    purge      => true,
+    mode       => '0755',
+    source     => 'puppet:///modules/ubuntu1304/common/usr/local/puppet-pkgs',
   }
 
   ##############################################################################
@@ -879,11 +551,11 @@ class ubuntu1304 {
   ##############################################################################
 
   mount { '/tmp':
-    ensure    => mounted,
-    atboot    => true,
-    device    => 'none',
-    fstype    => 'tmpfs',
-    options   => 'rw,nosuid,nodev,mode=01777',
+    ensure     => mounted,
+    atboot     => true,
+    device     => 'none',
+    fstype     => 'tmpfs',
+    options    => 'rw,nosuid,nodev,mode=01777',
   }
 
   ##############################################################################
@@ -891,14 +563,14 @@ class ubuntu1304 {
   ##############################################################################
 
   file { '/usr/lib64':
-    ensure    => directory,
-    mode      => '0755',
+    ensure     => directory,
+    mode       => '0755',
   }
   package { 'cackey':
-    ensure    => latest,
-    provider  => dpkg,
-    source    => '/usr/local/puppet-pkgs/cackey_0.6.5-1_amd64.deb',
-    require   => [ File['/usr/lib64'], File['/usr/local/puppet-pkgs'] ],
+    ensure     => latest,
+    provider   => dpkg,
+    source     => '/usr/local/puppet-pkgs/cackey_0.6.5-1_amd64.deb',
+    require    => [ File['/usr/lib64'], File['/usr/local/puppet-pkgs'] ],
   }
 
   ##############################################################################
@@ -906,24 +578,24 @@ class ubuntu1304 {
   ##############################################################################
 
   file { '/usr/local/scm':
-    ensure    => directory,
-    recurse   => true,
-    purge     => true,
-    source    => 'puppet:///modules/ubuntu1304/common/usr/local/scm',
+    ensure     => directory,
+    recurse    => true,
+    purge      => true,
+    source     => 'puppet:///modules/ubuntu1304/common/usr/local/scm',
   }
 
   file { '/usr/local/pcsc':
-    ensure    => directory,
-    recurse   => true,
-    purge     => true,
-    source    => 'puppet:///modules/ubuntu1304/common/usr/local/pcsc',
+    ensure     => directory,
+    recurse    => true,
+    purge      => true,
+    source     => 'puppet:///modules/ubuntu1304/common/usr/local/pcsc',
   }
 
   file { '/usr/local/lib/pcsc':
-    ensure    => directory,
-    recurse   => true,
-    purge     => true,
-    source    => 'puppet:///modules/ubuntu1304/common/usr/local/lib/pcsc',
+    ensure     => directory,
+    recurse    => true,
+    purge      => true,
+    source     => 'puppet:///modules/ubuntu1304/common/usr/local/lib/pcsc',
   }
 
   ##############################################################################
@@ -951,11 +623,11 @@ class ubuntu1304 {
   }
 
   file { '/usr/share/truecrypt':
-    ensure    => directory,
-    recurse   => true,
-    purge     => true,
-    mode      => '0644',
-    source    => 'puppet:///modules/ubuntu1304/common/usr/share/truecrypt',
+    ensure     => directory,
+    recurse    => true,
+    purge      => true,
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu1304/common/usr/share/truecrypt',
   }
 }
 
@@ -1007,7 +679,9 @@ class ubuntu1304::silverstone {
     home       => '/home/ps3mediaserver',
     comment    => 'PS3 Media Server User,,,',
     managehome => true,
-    require    => [ Group['ps3mediaserver'], File['/etc/skel/.config/ps3mediaserver/PMS.conf'], File['/etc/default/ps3mediaserver'] ],
+    require    => [ Group['ps3mediaserver'],
+      File['/etc/skel/.config/ps3mediaserver/PMS.conf'],
+      File['/etc/default/ps3mediaserver'] ],
   }
   service { 'ps3mediaserver':
     ensure     => running,
@@ -1027,7 +701,7 @@ class ubuntu1304::silverstone {
   }
 }
 
-class ubuntu1304::coolermaster {
+class ubuntu1304::withautofs {
 
   ##############################################################################
   # Coolermaster Specific
@@ -1035,14 +709,14 @@ class ubuntu1304::coolermaster {
 
   file { '/etc/auto.master':
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/coolermaster/etc/auto.master',
+    source     => 'puppet:///modules/ubuntu1304/withautofs/etc/auto.master',
     notify     => Service['autofs'],
     require    => Package['autofs'],
   }
 
   file { '/etc/auto.home':
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/coolermaster/etc/auto.home',
+    source     => 'puppet:///modules/ubuntu1304/withautofs/etc/auto.home',
     notify     => Service['autofs'],
     require    => Package['autofs'],
   }
@@ -1084,6 +758,8 @@ class ubuntu1304::withopenvpn {
   file { '/etc/openvpn/unovpn.conf':
     content    => template('ubuntu1304/etc/openvpn/unovpn.conf.erb'),
     mode       => '0600',
-    require    => [ Package['openvpn'], File["/etc/openvpn/${hostname}.crt"], File["/etc/openvpn/${hostname}.key"] ],
+    require    => [ Package['openvpn'],
+      File["/etc/openvpn/${hostname}.crt"],
+      File["/etc/openvpn/${hostname}.key"] ],
   }
 }
