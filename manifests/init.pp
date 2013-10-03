@@ -423,6 +423,26 @@ class ubuntu1304 {
   }
 
   ##############################################################################
+  # OpenNTPD Client
+  ##############################################################################
+
+  package { 'openntpd':
+    ensure     => installed,
+  }
+  file { '/etc/openntpd/ntpd.conf':
+    source     => 'puppet:///modules/ubuntu1304/common/etc/openntpd/ntpd.conf',
+    mode       => '0644',
+    notify     => Service['openntpd'],
+    require    => Package['openntpd'],
+  }
+  service { 'openntpd':
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
+  }
+
+  ##############################################################################
   # OpenSSH Server, Unison, and associated configurations
   ##############################################################################
 
