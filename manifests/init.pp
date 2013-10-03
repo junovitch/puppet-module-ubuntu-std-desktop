@@ -674,6 +674,15 @@ class ubuntu1304::silverstone {
     ensure     => installed,
   }
 
+  package { 'nfs-kernel-server':
+    ensure     => installed,
+  }
+  file { '/etc/exports':
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/exports',
+    require    => Package['nfs-kernel-server'],
+  }
+
   apt::ppa { 'ppa:happy-neko/ps3mediaserver': }
   package { 'ps3mediaserver':
     ensure     => installed,
