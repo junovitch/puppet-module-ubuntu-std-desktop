@@ -100,6 +100,7 @@ class ubuntu1304 {
 
   package { [
       'apparmor-profiles',
+      'apparmor-utils',
       'bleachbit',
       'chkrootkit',
       'clamav', 'clamtk',
@@ -108,6 +109,7 @@ class ubuntu1304 {
       'gufw',
       'hping3',
       'kismet',
+      'network-manager-openvpn',
       'nmap',
       'openvpn',
       'putty',
@@ -201,6 +203,7 @@ class ubuntu1304 {
       'gparted',
       'grub-customizer',
       'htop',
+      'multitail',
       'preload',
       'remmina',
       'synaptic',
@@ -223,6 +226,7 @@ class ubuntu1304 {
       'charm-tools', 'charm-helper-sh',
       'check',
       'checkinstall',
+      'clang',
       'cdbs',
       'devscripts',
       'dh-make',
