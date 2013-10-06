@@ -412,7 +412,18 @@ class ubuntu1304 {
   # Alternate Desktops
   ##############################################################################
 
-  package { [ 'cinnamon', 'kde-standard', 'xfce4', ]:
+  ## REMOVE AFTER TRANSITION TO (X|K)UBUNTU-DESKTOP METAPACKAGES -- START
+  package { 'kde-standard':
+    ensure     => absent,
+    before     => Package['kubuntu-desktop'],
+  }
+  package { 'xfce4':
+    ensure     => absent,
+    before     => Package['xubuntu-desktop'],
+    require    => Package['kubuntu-desktop'],
+  }
+  ## REMOVE AFTER TRANSITION TO (X|K)UBUNTU-DESKTOP METAPACKAGES -- END
+  package { [ 'cinnamon', 'kubuntu-desktop', 'xubuntu-desktop', ]:
     ensure     => installed,
   }
   package { [ 'unity', 'unity-tweak-tool', ]:
