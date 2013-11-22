@@ -92,11 +92,9 @@ class ubuntu1304 {
   # for security reasons or because they change so fast.
   ##############################################################################
 
-  apt::ppa { 'ppa:stebbins/handbrake-snapshots': }
   package { [
       'firefox',
-      'google-chrome-stable',
-      'handbrake-cli', 'handbrake-gtk',
+      'chromium-browser',
       'icedtea-plugin', 'icedtea-7-plugin', 'openjdk-7-jre',
       'skype',
       'thunderbird',
@@ -155,7 +153,7 @@ class ubuntu1304 {
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
   file { '/etc/pam.d/common-session':
-    source     => 'puppet:///modules/ubuntu1304/common/etc/pam.d/common-session',
+    source     => "puppet:///modules/ubuntu1304/common/etc/pam.d/common-session.${lsbdistcodename}",
     mode       => '0644',
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
@@ -221,10 +219,12 @@ class ubuntu1304 {
       'preload',
       'remmina',
       'synaptic',
+      'synergy',
       'tcsh',
       'terminator',
       'traceroute',
       'tmux',
+      'xterm',
       'zsh', 'zsh-doc', ]:
     ensure     => installed,
   }
@@ -237,7 +237,7 @@ class ubuntu1304 {
       'build-essential',
       'byobu',
       'bzr', 'bzr-explorer', 'bzr-git',
-      'charm-tools', 'charm-helper-sh',
+      'charm-tools',
       'check',
       'checkinstall',
       'clang',
@@ -316,6 +316,30 @@ class ubuntu1304 {
   # Video Tools
   ##############################################################################
 
+  if $operatingsystemrelease =~ /12.04|12.10|13.04/ {
+    # Remove old snapshot lists and install latest release for this version.
+    file { "/etc/apt/sources.list.d/stebbins-handbrake-snapshots-${lsbdistcodename}.list":
+      ensure  => absent,
+      backup  => false,
+    }
+    file { "/etc/apt/sources.list.d/stebbins-handbrake-snapshots-${lsbdistcodename}.list.save":
+      ensure  => absent,
+      backup  => false,
+    }
+    apt::ppa { 'ppa:stebbins/handbrake-releases': }
+    package { [ 'handbrake-cli', 'handbrake-gtk', ]:
+      ensure   => latest,
+      require  => Apt::Ppa['ppa:stebbins/handbrake-releases'],
+    }
+  }
+  if $operatingsystemrelease =~ /13.10/ {
+    # Install latest snapshot releases for these version(s).
+    apt::ppa { 'ppa:stebbins/handbrake-snapshots': }
+    package { [ 'handbrake-cli', 'handbrake-gtk', ]:
+      ensure   => latest,
+      require  => Apt::Ppa['ppa:stebbins/handbrake-snapshots'],
+    }
+  }
   package { [
       'blender',
       'cheese',
@@ -361,7 +385,7 @@ class ubuntu1304 {
   # Desktop Apps
   ##############################################################################
 
-  package { [ 'conky-all', 'gtk-redshift', 'wbar', ]:
+  package { [ 'conky-all', 'gtk-redshift', ]:
     ensure     => installed,
   }
 
@@ -400,6 +424,7 @@ class ubuntu1304 {
       'faac',
       'flac',
       'lame',
+      'libavcodec-dev',
       'libc6-dev',
       'libexpat1-dev',
       'libgl1-mesa-dev',
@@ -432,10 +457,28 @@ class ubuntu1304 {
   # Alternate Desktops
   ##############################################################################
 
-  package { [ 'cinnamon', 'kubuntu-desktop', 'xubuntu-desktop', ]:
+  if $operatingsystemrelease =~ /^13.10$/ {
+    apt::ppa { 'ppa:gwendal-lebihan-dev/cinnamon-stable': }
+    package { 'cinnamon':
+      ensure   => installed,
+      require  => Apt::Ppa['ppa:gwendal-lebihan-dev/cinnamon-stable'],
+    }
+  }
+  else {
+    package { 'cinnamon':
+      ensure   => installed,
+    }
+  }
+  package { 'i3':
     ensure     => installed,
   }
-  package { [ 'unity', 'unity-tweak-tool', ]:
+  package { 'kubuntu-desktop':
+    ensure     => installed,
+  }
+  package { 'xfce4':
+    ensure     => installed,
+  }
+  package { [ 'ubuntu-desktop', 'unity-tweak-tool', ]:
     ensure     => installed,
   }
   package { 'unity-lens-shopping':
@@ -512,15 +555,6 @@ class ubuntu1304 {
     ensure     => directory,
     mode       => '0755',
   }
-  file { '/root/.unison/accountSync.prf':
-    source     => 'puppet:///modules/ubuntu1304/common/root/.unison/accountSync.prf',
-    mode       => '0644',
-    require    => File['/root/.unison'],
-  }
-  file { '/etc/cron.daily/accountSync.sh':
-    mode       => '0755',
-    source     => 'puppet:///modules/ubuntu1304/common/etc/cron.daily/accountSync.sh',
-  }
   service { 'ssh':
     ensure     => running,
     enable     => true,
@@ -557,12 +591,20 @@ class ubuntu1304 {
   # User Avatar Photos (purge => false to just put avatars in place)
   ##############################################################################
 
-  file { '/var/lib/AccountsService':
+  file { '/var/lib/AccountsService/icons':
     ensure     => directory,
     recurse    => true,
     purge      => false,
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/common/var/lib/AccountsService',
+    source     => 'puppet:///modules/ubuntu1304/common/var/lib/AccountsService/icons',
+  }
+  file { '/var/lib/AccountsService/users':
+    ensure     => directory,
+    recurse    => true,
+    purge      => false,
+    replace    => false,
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu1304/common/var/lib/AccountsService/users',
   }
 
   ##############################################################################
@@ -581,10 +623,34 @@ class ubuntu1304 {
   # LightDM conf to set Cinnamon as default and make login/logout scripts hot
   ##############################################################################
 
-  file { '/etc/lightdm/lightdm.conf':
+  case $operatingsystemrelease {
+    /^13.10$/: {
+      file { '/etc/lightdm/lightdm.conf':
+        mode    => '0644',
+        source  => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm.conf.new_version',
+        require => [ File['/usr/local/bin'], Package['xterm'] ],
+      }
+      file { '/etc/lightdm/lightdm-kde-greeter.conf':
+        mode    => '0644',
+        source  => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm-kde-greeter.conf',
+        require => File['/etc/lightdm/lightdm-background.jpg'],
+      }
+      file { '/etc/lightdm/lightdm-background.jpg':
+        mode    => '0644',
+        source  => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm-background.jpg',
+      }
+    }
+    default: {
+      file { '/etc/lightdm/lightdm.conf':
+        mode    => '0644',
+        source  => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm.conf.old_version',
+        require => [ File['/usr/local/bin'], Package['cinnamon'] ],
+      }
+    }
+  }
+  file { '/usr/share/desktop-base/profiles/kde-profile/share/config/ksplashrc':
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm.conf',
-    require    => [ File['/usr/local/bin'], Package['cinnamon'] ],
+    source     => 'puppet:///modules/ubuntu1304/common/usr/share/desktop-base/profiles/kde-profile/share/config/ksplashrc',
   }
 
   ##############################################################################
@@ -714,46 +780,47 @@ class ubuntu1304::silverstone {
     require    => Package['nfs-kernel-server'],
   }
 
-  apt::ppa { 'ppa:happy-neko/ps3mediaserver': }
-  package { 'ps3mediaserver':
-    ensure     => installed,
-  }
-  file { '/etc/default/ps3mediaserver':
-    mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/default/ps3mediaserver',
-    notify     => Service['ps3mediaserver'],
-    require    => Package['ps3mediaserver'],
-  }
-  file { '/etc/skel/.config/ps3mediaserver/PMS.conf':
-    mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/skel/.config/ps3mediaserver/PMS.conf',
-    require    => Package['ps3mediaserver'],
-  }
-  group { 'ps3mediaserver':
-    ensure     => present,
-    system     => true,
-    require    => Package['ps3mediaserver'],
-  }
-  user { 'ps3mediaserver':
-    ensure     => present,
-    system     => true,
-    gid        => 'ps3mediaserver',
-    password   => '*',
-    shell      => '/bin/false',
-    home       => '/home/ps3mediaserver',
-    comment    => 'PS3 Media Server User,,,',
-    managehome => true,
-    require    => [ Group['ps3mediaserver'],
-      File['/etc/skel/.config/ps3mediaserver/PMS.conf'],
-      File['/etc/default/ps3mediaserver'] ],
-  }
-  service { 'ps3mediaserver':
-    ensure     => running,
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => User['ps3mediaserver'],
-  }
+#  apt::ppa { 'ppa:happy-neko/ps3mediaserver': }
+#  package { 'ps3mediaserver':
+#    ensure     => installed,
+#    require    => Apt::Ppa['ppa:happy-neko/ps3mediaserver'],
+#  }
+#  file { '/etc/default/ps3mediaserver':
+#    mode       => '0644',
+#    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/default/ps3mediaserver',
+#    notify     => Service['ps3mediaserver'],
+#    require    => Package['ps3mediaserver'],
+#  }
+#  file { '/etc/skel/.config/ps3mediaserver/PMS.conf':
+#    mode       => '0644',
+#    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/skel/.config/ps3mediaserver/PMS.conf',
+#    require    => Package['ps3mediaserver'],
+#  }
+#  group { 'ps3mediaserver':
+#    ensure     => present,
+#    system     => true,
+#    require    => Package['ps3mediaserver'],
+#  }
+#  user { 'ps3mediaserver':
+#    ensure     => present,
+#    system     => true,
+#    gid        => 'ps3mediaserver',
+#    password   => '*',
+#    shell      => '/bin/false',
+#    home       => '/home/ps3mediaserver',
+#    comment    => 'PS3 Media Server User,,,',
+#    managehome => true,
+#    require    => [ Group['ps3mediaserver'],
+#      File['/etc/skel/.config/ps3mediaserver/PMS.conf'],
+#      File['/etc/default/ps3mediaserver'] ],
+#  }
+#  service { 'ps3mediaserver':
+#    ensure     => running,
+#    enable     => true,
+#    hasstatus  => true,
+#    hasrestart => true,
+#    require    => User['ps3mediaserver'],
+#  }
 
   package { 'boinc':
     ensure     => installed,
@@ -773,7 +840,7 @@ class ubuntu1304::withautofs {
 
   file { '/etc/auto.master':
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/withautofs/etc/auto.master',
+    source     => "puppet:///modules/ubuntu1304/withautofs/etc/auto.master.${lsbdistcodename}",
     notify     => Service['autofs'],
     require    => Package['autofs'],
   }
