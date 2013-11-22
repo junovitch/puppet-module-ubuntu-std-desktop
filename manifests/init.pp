@@ -78,6 +78,16 @@ class ubuntu1304 {
   }
 
   ##############################################################################
+  # Enable Canonical Partner repository for packages like Skype/Flash
+  ##############################################################################
+
+  apt::source { 'canonical_partner':
+    location   => 'http://archive.canonical.com/ubuntu',
+    release    => "${lsbdistcodename}",
+    repos      => 'partner',
+  }
+
+  ##############################################################################
   # Security sensitive and snapshot repositories.  These are always the latest
   # for security reasons or because they change so fast.
   ##############################################################################
@@ -92,6 +102,7 @@ class ubuntu1304 {
       'thunderbird',
       'ubuntu-restricted-addons', 'ubuntu-restricted-extras', ]:
     ensure     => latest,
+    require    => Apt::Source['canonical_partner'],
   }
 
   ##############################################################################
@@ -194,6 +205,10 @@ class ubuntu1304 {
   ##############################################################################
 
   apt::ppa { 'ppa:danielrichter2007/grub-customizer': }
+  package { 'grub-customizer':
+    ensure     => installed,
+    require    => Apt::Ppa['ppa:danielrichter2007/grub-customizer'],
+  }
   package { [
       'blueman',
       'clusterssh',
@@ -201,7 +216,6 @@ class ubuntu1304 {
       'gconf-editor',
       'gddrescue',
       'gparted',
-      'grub-customizer',
       'htop',
       'multitail',
       'preload',
@@ -276,10 +290,11 @@ class ubuntu1304 {
   ##############################################################################
 
   apt::ppa { 'ppa:ehoover/compholio': }
-  package { [
-      'banshee', 'banshee-extension-ampache',
-      'netflix-desktop',
-      'vlc', ]:
+  package { 'netflix-desktop':
+    ensure     => installed,
+    require    => Apt::Ppa['ppa:ehoover/compholio'],
+  }
+  package { [ 'banshee', 'banshee-extension-ampache', 'vlc', ]:
     ensure     => installed,
   }
 
@@ -354,8 +369,13 @@ class ubuntu1304 {
   # Google Earth
   ##############################################################################
 
-  package { [ 'lsb-core', 'google-earth-stable', ]:
+  package { 'lsb-core':
     ensure     => installed,
+  }
+  package { 'google-earth-stable':
+    provider   => dpkg,
+    source     => '/usr/local/puppet-pkgs/googleearth.deb',
+    require    => [ Package['lsb-core'], File['/usr/local/puppet-pkgs'] ],
   }
 
   ##############################################################################
@@ -682,6 +702,7 @@ class ubuntu1304::silverstone {
   apt::ppa { 'ppa:zfs-native/stable': }
   package { 'ubuntu-zfs':
     ensure     => installed,
+    require    => Apt::Ppa['ppa:zfs-native/stable'],
   }
 
   package { 'nfs-kernel-server':
