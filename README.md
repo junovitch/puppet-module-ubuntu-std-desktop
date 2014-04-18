@@ -1,4 +1,4 @@
-puppet-module-ubuntu1304
+puppet-module-ubuntu-std-desktop
 ========================
 
-Contains a monolithic module manifest to completely configure a standard desktop configuration on my Ubuntu 13.04 machines.
+Contains a monolithic module manifest to completely configure a standard desktop configuration on my Ubuntu machines.
