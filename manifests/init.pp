@@ -33,7 +33,7 @@
 # it however you see fit.
 #
 # Location:
-# etc/puppet/modules/ubuntu1304/manifests/init.pp
+# etc/puppet/modules/ubuntu_sdc/manifests/init.pp
 #
 # Prerequisites:
 # Get the 'apt' module - `puppet module install puppetlabs/apt`
@@ -45,7 +45,7 @@
 # Usage:
 # Specify using the module in the site.pp manifest.
 #   node mycomputer {
-#     include ubuntu1304
+#     include ubuntu_sdc
 #   }
 #
 # Warnings:
@@ -66,7 +66,7 @@
 ################################################################################
 
 
-class ubuntu1304 {
+class ubuntu_sdc {
 
   ##############################################################################
   # Set defaults for all Files
@@ -137,23 +137,23 @@ class ubuntu1304 {
     ensure     => installed,
   }
   file { '/etc/fuse.conf':
-    source     => 'puppet:///modules/ubuntu1304/common/etc/fuse.conf',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/fuse.conf',
     group      => fuse,
     mode       => '0640',
     require    => Package['fuse'],
   }
   file { '/etc/security/pam_env.conf':
-    source     => 'puppet:///modules/ubuntu1304/common/etc/security/pam_env.conf',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/security/pam_env.conf',
     mode       => '0644',
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
   file { '/etc/security/pam_encfs.conf':
-    source     => 'puppet:///modules/ubuntu1304/common/etc/security/pam_encfs.conf',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/security/pam_encfs.conf',
     mode       => '0644',
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
   file { '/etc/pam.d/common-session':
-    source     => "puppet:///modules/ubuntu1304/common/etc/pam.d/common-session.${lsbdistcodename}",
+    source     => "puppet:///modules/ubuntu_sdc/common/etc/pam.d/common-session.${lsbdistcodename}",
     mode       => '0644',
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
@@ -436,7 +436,7 @@ class ubuntu1304 {
     ensure     => installed,
   }
   file { '/usr/lib64/libaacs.so.0':
-    source     => 'puppet:///modules/ubuntu1304/common/usr/lib64/libaacs.so.0',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/lib64/libaacs.so.0',
     mode       => '0644',
     require    => File['/usr/lib64'],
   }
@@ -449,7 +449,7 @@ class ubuntu1304 {
     recurse    => true,
     purge      => true,
     mode       => '0755',
-    source     => 'puppet:///modules/ubuntu1304/common/etc/skel/.config/aacs',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/skel/.config/aacs',
     require    => File['/etc/skel/.config'],
   }
 
@@ -490,7 +490,7 @@ class ubuntu1304 {
   ##############################################################################
 
   file { '/etc/puppet/puppet.conf':
-    content    => template('ubuntu1304/etc/puppet/puppet.conf.erb'),
+    content    => template('ubuntu_sdc/etc/puppet/puppet.conf.erb'),
     mode       => '0644',
   }
 
@@ -502,7 +502,7 @@ class ubuntu1304 {
     ensure     => installed,
   }
   file { '/etc/openntpd/ntpd.conf':
-    source     => 'puppet:///modules/ubuntu1304/common/etc/openntpd/ntpd.conf',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/openntpd/ntpd.conf',
     mode       => '0644',
     notify     => Service['openntpd'],
     require    => Package['openntpd'],
@@ -527,7 +527,7 @@ class ubuntu1304 {
     ensure     => installed,
   }
   file { '/etc/ssh/sshd_config':
-    source     => 'puppet:///modules/ubuntu1304/common/etc/ssh/sshd_config',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/ssh/sshd_config',
     mode       => '0640',
     notify     => Service['ssh'],
     require    => Package['openssh-server'],
@@ -537,17 +537,17 @@ class ubuntu1304 {
     mode       => '0700',
   }
   file { '/root/.ssh/authorized_keys':
-    source     => 'puppet:///modules/ubuntu1304/common/root/.ssh/authorized_keys',
+    source     => 'puppet:///modules/ubuntu_sdc/common/root/.ssh/authorized_keys',
     mode       => '0600',
     require    => File['/root/.ssh'],
   }
   file { '/root/.ssh/id_ecdsa':
-    source     => "puppet:///modules/ubuntu1304/common/root/.ssh/${hostname}-id_ecdsa",
+    source     => "puppet:///modules/ubuntu_sdc/common/root/.ssh/${hostname}-id_ecdsa",
     mode       => '0600',
     require    => File['/root/.ssh'],
   }
   file { '/root/.ssh/id_ecdsa.pub':
-    source     => "puppet:///modules/ubuntu1304/common/root/.ssh/${hostname}-id_ecdsa.pub",
+    source     => "puppet:///modules/ubuntu_sdc/common/root/.ssh/${hostname}-id_ecdsa.pub",
     mode       => '0644',
     require    => File['/root/.ssh'],
   }
@@ -571,7 +571,7 @@ class ubuntu1304 {
   }
   file { '/etc/idmapd.conf':
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/common/etc/idmapd.conf',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/idmapd.conf',
     notify     => Service['idmapd'],
     require    => Package['nfs-common'],
   }
@@ -583,7 +583,7 @@ class ubuntu1304 {
   }
   file { '/etc/default/nfs-common':
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/common/etc/default/nfs-common',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/default/nfs-common',
     require    => Package['nfs-common'],
   }
 
@@ -596,7 +596,7 @@ class ubuntu1304 {
     recurse    => true,
     purge      => false,
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/common/var/lib/AccountsService/icons',
+    source     => 'puppet:///modules/ubuntu_sdc/common/var/lib/AccountsService/icons',
   }
   file { '/var/lib/AccountsService/users':
     ensure     => directory,
@@ -604,7 +604,7 @@ class ubuntu1304 {
     purge      => false,
     replace    => false,
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/common/var/lib/AccountsService/users',
+    source     => 'puppet:///modules/ubuntu_sdc/common/var/lib/AccountsService/users',
   }
 
   ##############################################################################
@@ -615,7 +615,7 @@ class ubuntu1304 {
     ensure     => directory,
     recurse    => true,
     purge      => false,
-    source     => 'puppet:///modules/ubuntu1304/common/usr/local/bin',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/local/bin',
     mode       => '0755',
   }
 
@@ -627,30 +627,30 @@ class ubuntu1304 {
     /^13.10$/: {
       file { '/etc/lightdm/lightdm.conf':
         mode    => '0644',
-        source  => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm.conf.new_version',
+        source  => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm.conf.new_version',
         require => [ File['/usr/local/bin'], Package['xterm'] ],
       }
       file { '/etc/lightdm/lightdm-kde-greeter.conf':
         mode    => '0644',
-        source  => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm-kde-greeter.conf',
+        source  => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm-kde-greeter.conf',
         require => File['/etc/lightdm/lightdm-background.jpg'],
       }
       file { '/etc/lightdm/lightdm-background.jpg':
         mode    => '0644',
-        source  => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm-background.jpg',
+        source  => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm-background.jpg',
       }
     }
     default: {
       file { '/etc/lightdm/lightdm.conf':
         mode    => '0644',
-        source  => 'puppet:///modules/ubuntu1304/common/etc/lightdm/lightdm.conf.old_version',
+        source  => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm.conf.old_version',
         require => [ File['/usr/local/bin'], Package['cinnamon'] ],
       }
     }
   }
   file { '/usr/share/desktop-base/profiles/kde-profile/share/config/ksplashrc':
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/common/usr/share/desktop-base/profiles/kde-profile/share/config/ksplashrc',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/share/desktop-base/profiles/kde-profile/share/config/ksplashrc',
   }
 
   ##############################################################################
@@ -662,7 +662,7 @@ class ubuntu1304 {
     recurse    => true,
     purge      => true,
     mode       => '0755',
-    source     => 'puppet:///modules/ubuntu1304/common/usr/local/puppet-pkgs',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/local/puppet-pkgs',
     backup     => false,
   }
 
@@ -701,21 +701,21 @@ class ubuntu1304 {
     ensure     => directory,
     recurse    => true,
     purge      => true,
-    source     => 'puppet:///modules/ubuntu1304/common/usr/local/scm',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/local/scm',
   }
 
   file { '/usr/local/pcsc':
     ensure     => directory,
     recurse    => true,
     purge      => true,
-    source     => 'puppet:///modules/ubuntu1304/common/usr/local/pcsc',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/local/pcsc',
   }
 
   file { '/usr/local/lib/pcsc':
     ensure     => directory,
     recurse    => true,
     purge      => true,
-    source     => 'puppet:///modules/ubuntu1304/common/usr/local/lib/pcsc',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/local/lib/pcsc',
   }
 
   ##############################################################################
@@ -723,22 +723,22 @@ class ubuntu1304 {
   ##############################################################################
 
   file { '/usr/bin/truecrypt':
-    source     => 'puppet:///modules/ubuntu1304/common/usr/bin/truecrypt',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/bin/truecrypt',
     mode       => '0755',
   }
 
   file { '/usr/bin/truecrypt-uninstall.sh':
-    source     => 'puppet:///modules/ubuntu1304/common/usr/bin/truecrypt-uninstall.sh',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/bin/truecrypt-uninstall.sh',
     mode       => '0754',
   }
 
   file { '/usr/share/applications/truecrypt.desktop':
-    source     => 'puppet:///modules/ubuntu1304/common/usr/share/applications/truecrypt.desktop',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/share/applications/truecrypt.desktop',
     mode       => '0644',
   }
 
   file { '/usr/share/pixmaps/truecrypt.xpm':
-    source     => 'puppet:///modules/ubuntu1304/common/usr/share/pixmaps/truecrypt.xpm',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/share/pixmaps/truecrypt.xpm',
     mode       => '0644',
   }
 
@@ -747,11 +747,11 @@ class ubuntu1304 {
     recurse    => true,
     purge      => true,
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/common/usr/share/truecrypt',
+    source     => 'puppet:///modules/ubuntu_sdc/common/usr/share/truecrypt',
   }
 }
 
-class ubuntu1304::devel {
+class ubuntu_sdc::devel {
 
   ##############################################################################
   # Development Stuff only
@@ -759,7 +759,7 @@ class ubuntu1304::devel {
 
 }
 
-class ubuntu1304::silverstone {
+class ubuntu_sdc::silverstone {
 
   ##############################################################################
   # Silverstone Specific
@@ -776,7 +776,7 @@ class ubuntu1304::silverstone {
   }
   file { '/etc/exports':
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/exports',
+    source     => 'puppet:///modules/ubuntu_sdc/silverstone/etc/exports',
     require    => Package['nfs-kernel-server'],
   }
 
@@ -787,13 +787,13 @@ class ubuntu1304::silverstone {
 #  }
 #  file { '/etc/default/ps3mediaserver':
 #    mode       => '0644',
-#    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/default/ps3mediaserver',
+#    source     => 'puppet:///modules/ubuntu_sdc/silverstone/etc/default/ps3mediaserver',
 #    notify     => Service['ps3mediaserver'],
 #    require    => Package['ps3mediaserver'],
 #  }
 #  file { '/etc/skel/.config/ps3mediaserver/PMS.conf':
 #    mode       => '0644',
-#    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/skel/.config/ps3mediaserver/PMS.conf',
+#    source     => 'puppet:///modules/ubuntu_sdc/silverstone/etc/skel/.config/ps3mediaserver/PMS.conf',
 #    require    => Package['ps3mediaserver'],
 #  }
 #  group { 'ps3mediaserver':
@@ -828,11 +828,11 @@ class ubuntu1304::silverstone {
 
   file { '/etc/cron.daily/rollingsnap':
     mode       => '0755',
-    source     => 'puppet:///modules/ubuntu1304/silverstone/etc/cron.daily/rollingsnap',
+    source     => 'puppet:///modules/ubuntu_sdc/silverstone/etc/cron.daily/rollingsnap',
   }
 }
 
-class ubuntu1304::withautofs {
+class ubuntu_sdc::withautofs {
 
   ##############################################################################
   # Coolermaster Specific
@@ -840,14 +840,14 @@ class ubuntu1304::withautofs {
 
   file { '/etc/auto.master':
     mode       => '0644',
-    source     => "puppet:///modules/ubuntu1304/withautofs/etc/auto.master.${lsbdistcodename}",
+    source     => "puppet:///modules/ubuntu_sdc/withautofs/etc/auto.master.${lsbdistcodename}",
     notify     => Service['autofs'],
     require    => Package['autofs'],
   }
 
   file { '/etc/auto.home':
     mode       => '0644',
-    source     => 'puppet:///modules/ubuntu1304/withautofs/etc/auto.home',
+    source     => 'puppet:///modules/ubuntu_sdc/withautofs/etc/auto.home',
     notify     => Service['autofs'],
     require    => Package['autofs'],
   }
@@ -860,34 +860,34 @@ class ubuntu1304::withautofs {
   }
 }
 
-class ubuntu1304::withopenvpn {
+class ubuntu_sdc::withopenvpn {
 
   ##############################################################################
   # Include OpenVPN configuration Template
   ##############################################################################
 
   file { '/etc/openvpn/ca.crt':
-    source     => 'puppet:///modules/ubuntu1304/common/etc/openvpn/ca.crt',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/openvpn/ca.crt',
     mode       => '0644',
     require    => Package['openvpn'],
   }
   file { '/etc/openvpn/ta.key':
-    source     => 'puppet:///modules/ubuntu1304/common/etc/openvpn/ta.key',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/openvpn/ta.key',
     mode       => '0600',
     require    => Package['openvpn'],
   }
   file { "/etc/openvpn/${hostname}.crt":
-    source     => "puppet:///modules/ubuntu1304/common/etc/openvpn/${hostname}.crt",
+    source     => "puppet:///modules/ubuntu_sdc/common/etc/openvpn/${hostname}.crt",
     mode       => '0644',
     require    => Package['openvpn'],
   }
   file { "/etc/openvpn/${hostname}.key":
-    source     => "puppet:///modules/ubuntu1304/common/etc/openvpn/${hostname}.key",
+    source     => "puppet:///modules/ubuntu_sdc/common/etc/openvpn/${hostname}.key",
     mode       => '0600',
     require    => Package['openvpn'],
   }
   file { '/etc/openvpn/unovpn.conf':
-    content    => template('ubuntu1304/etc/openvpn/unovpn.conf.erb'),
+    content    => template('ubuntu_sdc/etc/openvpn/unovpn.conf.erb'),
     mode       => '0600',
     require    => [ Package['openvpn'],
       File["/etc/openvpn/${hostname}.crt"],
