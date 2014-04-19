@@ -495,23 +495,11 @@ class ubuntu_sdc {
   }
 
   ##############################################################################
-  # OpenNTPD Client
+  # NTP Client via Puppetlabs module - `puppet module install puppetlabs-ntp`
   ##############################################################################
 
-  package { 'openntpd':
-    ensure     => installed,
-  }
-  file { '/etc/openntpd/ntpd.conf':
-    source     => 'puppet:///modules/ubuntu_sdc/common/etc/openntpd/ntpd.conf',
-    mode       => '0644',
-    notify     => Service['openntpd'],
-    require    => Package['openntpd'],
-  }
-  service { 'openntpd':
-    ensure     => running,
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
+  class { '::ntp':
+    servers    => [ $ntp_server ],
   }
 
   ##############################################################################
