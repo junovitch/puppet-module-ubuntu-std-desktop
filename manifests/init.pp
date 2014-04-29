@@ -800,12 +800,12 @@ class ubuntu_sdc::silverstone {
 class ubuntu_sdc::withautofs {
 
   ##############################################################################
-  # Coolermaster Specific
+  # Include AutoFS Specific Configs
   ##############################################################################
 
   file { '/etc/auto.master':
     mode       => '0644',
-    source     => "puppet:///modules/ubuntu_sdc/withautofs/etc/auto.master.${lsbdistcodename}",
+    source     => 'puppet:///modules/ubuntu_sdc/withautofs/etc/auto.master',
     notify     => Service['autofs'],
     require    => Package['autofs'],
   }
