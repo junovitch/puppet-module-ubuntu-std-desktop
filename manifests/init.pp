@@ -272,10 +272,18 @@ class ubuntu_sdc {
   # Media Players
   ##############################################################################
 
-  apt::ppa { 'ppa:ehoover/compholio': }
-  package { 'netflix-desktop':
+  apt::ppa { 'ppa:pipelight/stable': }
+  package { 'pipelight-multi':
     ensure     => installed,
-    require    => Apt::Ppa['ppa:ehoover/compholio'],
+    require    => Apt::Ppa['ppa:pipelight/stable'],
+  }
+  exec { '/usr/bin/pipelight-plugin --accept --enable silverlight':
+    creates    => '/usr/lib/mozilla/plugins/libpipelight-silverlight5.1.so',
+    require    => Package['pipelight-multi'],
+  }
+  exec { '/usr/bin/pipelight-plugin --accept --enable widevine':
+    creates    => '/usr/lib/mozilla/plugins/libpipelight-widevine.so',
+    require    => Package['pipelight-multi'],
   }
   package { [ 'banshee', 'vlc', ]:
     ensure     => installed,
