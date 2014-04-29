@@ -48,21 +48,6 @@
 #     include ubuntu_sdc
 #   }
 #
-# Warnings:
-# Currently doesn't check for the PPA to be added before installing a package.
-# This will cause an error when it first tries to install a package before
-# adding the PPA. It will pick up the PPA and install during the next catalog
-# run.
-#
-# As of writing Google Earth will be manually installed
-# from a *.deb package after the first run.  Assuming the files are in place
-# on the puppetmaster, they will be downloaded to the host to be installed by
-# hand.
-#
-# cd /usr/local/puppet-pkgs
-# dpkg -i google-earth-stable_current_amd64.deb
-# apt-get -f install
-#
 ################################################################################
 
 
