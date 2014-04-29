@@ -1,7 +1,7 @@
 ################################################################################
-##  Ubuntu 13.04 Puppet Manifest  ##############################################
+##  Ubuntu 14.04 Puppet Manifest  ##############################################
 ################################################################################
-# Copyright (C) 2013 Jason Unovitch, jason.unovitch@gmail.com                  #
+# Copyright (C) 2013-2014 Jason Unovitch, jason.unovitch@gmail.com             #
 #   https://github.com/junovitch                                               #
 ################################################################################
 # Redistribution and use in source and binary forms, with or without           #
@@ -27,7 +27,7 @@
 ################################################################################
 #
 # Purpose: Provides a one-stop shop manifest to cover a standard desktop
-# configuration on my Ubuntu 13.04 Linux machines. This was my first experience
+# configuration on my Ubuntu 14.04 Linux machines. This was my first experience
 # learning Puppet for configuration management and it can be broken down to
 # be smaller... But it works for me so I'll leave it as is. Feel free to use
 # it however you see fit.
@@ -36,7 +36,8 @@
 # etc/puppet/modules/ubuntu_sdc/manifests/init.pp
 #
 # Prerequisites:
-# Get the 'apt' module - `puppet module install puppetlabs/apt`
+# Get the 'apt' module - `puppet module install puppetlabs-apt`
+# Get the 'apt' module - `puppet module install puppetlabs-ntp`
 #
 # Also, if you are looking to use this you'll need multiple installer packages
 # that cannot be redistributed or you should be getting on your own from the
