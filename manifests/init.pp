@@ -438,11 +438,11 @@ class ubuntu_sdc {
   # Alternate Desktops
   ##############################################################################
 
-  if $operatingsystemrelease =~ /^13.10$/ {
-    apt::ppa { 'ppa:gwendal-lebihan-dev/cinnamon-stable': }
+  if $operatingsystemrelease =~ /^14.04$/ {
+    apt::ppa { 'ppa:gwendal-lebihan-dev/cinnamon-nightly': }
     package { 'cinnamon':
-      ensure   => installed,
-      require  => Apt::Ppa['ppa:gwendal-lebihan-dev/cinnamon-stable'],
+      ensure   => latest,
+      require  => Apt::Ppa['ppa:gwendal-lebihan-dev/cinnamon-nightly'],
     }
   }
   else {
