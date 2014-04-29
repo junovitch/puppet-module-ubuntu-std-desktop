@@ -71,21 +71,26 @@ class ubuntu_sdc {
     release    => "${lsbdistcodename}",
     repos      => 'partner',
   }
+  package { [ 'skype',
+      'kubuntu-restricted-addons', 'kubuntu-restricted-extras',
+      'pepperflashplugin-nonfree', ]:
+    ensure     => installed,
+    require    => Apt::Source['canonical_partner'],
+  }
 
   ##############################################################################
-  # Security sensitive and snapshot repositories.  These are always the latest
-  # for security reasons or because they change so fast.
+  # Web Apps and Communication Apps
   ##############################################################################
 
   package { [
-      'firefox',
       'chromium-browser',
+      'clamz',
+      'firefox',
       'icedtea-plugin', 'icedtea-7-plugin', 'openjdk-7-jre',
-      'skype',
-      'thunderbird',
-      'ubuntu-restricted-addons', 'ubuntu-restricted-extras', ]:
-    ensure     => latest,
-    require    => Apt::Source['canonical_partner'],
+      'mpack',
+      'pidgin', 'pidgin-otr', 'pidgin-encryption',
+      'thunderbird', 'thunderbird-locale-en', ]:
+    ensure     => installed,
   }
 
   ##############################################################################
@@ -337,22 +342,6 @@ class ubuntu_sdc {
       'devede',
       'openshot', 'openshot-doc',
       'mkvtoolnix', 'mkvtoolnix-gui', ]:
-    ensure     => installed,
-  }
-
-  ##############################################################################
-  # Web Applications & Tools
-  ##############################################################################
-
-  package { ['bluefish', 'clamz', 'mpack', ]:
-    ensure     => installed,
-  }
-
-  ##############################################################################
-  # Web Communication Apps
-  ##############################################################################
-
-  package { [ 'pidgin', 'pidgin-otr', 'pidgin-encryption', ]:
     ensure     => installed,
   }
 
