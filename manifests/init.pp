@@ -312,8 +312,16 @@ class ubuntu_sdc {
   # Video Tools
   ##############################################################################
 
-  if $operatingsystemrelease =~ /12.04|12.10|13.04/ {
-    # Remove old snapshot lists and install latest release for this version.
+  if $operatingsystemrelease =~ /^13.10$|^14.04$/ {
+    # Install latest snapshot for Ubuntu version without a Handbrake 'release'.
+    apt::ppa { 'ppa:stebbins/handbrake-snapshots': }
+    package { [ 'handbrake-cli', 'handbrake-gtk', ]:
+      ensure   => latest,
+      require  => Apt::Ppa['ppa:stebbins/handbrake-snapshots'],
+    }
+  }
+  else {
+    # Else remove old snapshot lists and install the 'release' version.
     file { "/etc/apt/sources.list.d/stebbins-handbrake-snapshots-${lsbdistcodename}.list":
       ensure  => absent,
       backup  => false,
@@ -326,14 +334,6 @@ class ubuntu_sdc {
     package { [ 'handbrake-cli', 'handbrake-gtk', ]:
       ensure   => latest,
       require  => Apt::Ppa['ppa:stebbins/handbrake-releases'],
-    }
-  }
-  if $operatingsystemrelease =~ /13.10/ {
-    # Install latest snapshot releases for these version(s).
-    apt::ppa { 'ppa:stebbins/handbrake-snapshots': }
-    package { [ 'handbrake-cli', 'handbrake-gtk', ]:
-      ensure   => latest,
-      require  => Apt::Ppa['ppa:stebbins/handbrake-snapshots'],
     }
   }
   package { [
