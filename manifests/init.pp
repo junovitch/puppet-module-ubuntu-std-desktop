@@ -107,7 +107,6 @@ class ubuntu_sdc {
       'nmap',
       'openvpn',
       'putty',
-      'sockstat',
       'tshark',
       'wireshark', 'wireshark-doc', ]:
     ensure     => installed,
@@ -157,14 +156,14 @@ class ubuntu_sdc {
   # Steam + Dependencies
   ##############################################################################
 
-  package { [ 'curl', 'jockey-common', 'nvidia-common', 'python-xkit', ]:
+  package { [ 'curl', 'nvidia-common', 'python-xkit', ]:
     ensure     => installed,
   }
   package { 'steam-launcher':
     ensure     => installed,
     provider   => dpkg,
     source     => '/usr/local/puppet-pkgs/steam.deb',
-    require    => [ Package['curl'], Package['jockey-common'],
+    require    => [ Package['curl'],
       Package['nvidia-common'], Package['python-xkit'],
       File['/usr/local/puppet-pkgs'] ],
   }
@@ -193,8 +192,10 @@ class ubuntu_sdc {
     require    => Apt::Ppa['ppa:danielrichter2007/grub-customizer'],
   }
   package { [
+      'aptitude',
       'blueman',
       'clusterssh',
+      'discover',
       'etherwake', 'wakeonlan',
       'gconf-editor',
       'gddrescue',
@@ -203,6 +204,7 @@ class ubuntu_sdc {
       'multitail',
       'preload',
       'remmina',
+      'screen',
       'synaptic',
       'synergy',
       'tcsh',
@@ -220,8 +222,6 @@ class ubuntu_sdc {
 
   package { [
       'build-essential',
-      'byobu',
-      'bzr', 'bzr-explorer', 'bzr-git',
       'charm-tools',
       'check',
       'checkinstall',
@@ -235,10 +235,8 @@ class ubuntu_sdc {
       'git', 'git-core',
       'juju',
       'kexec-tools',
-      'meld',
       'perl-tk',
       'qtcreator',
-      'quickly',
       'subversion',
       'sharutils',
       'uudeview',
@@ -279,7 +277,7 @@ class ubuntu_sdc {
     ensure     => installed,
     require    => Apt::Ppa['ppa:ehoover/compholio'],
   }
-  package { [ 'banshee', 'banshee-extension-ampache', 'vlc', ]:
+  package { [ 'banshee', 'vlc', ]:
     ensure     => installed,
   }
 
@@ -362,7 +360,7 @@ class ubuntu_sdc {
   # Document tools
   ##############################################################################
 
-  package { [ 'lyx', 'pdfshuffler', ]:
+  package { [ 'evince-gtk', 'lyx', 'pdfshuffler', ]:
     ensure     => installed,
   }
 
@@ -370,7 +368,7 @@ class ubuntu_sdc {
   # Desktop Apps
   ##############################################################################
 
-  package { [ 'conky-all', 'gtk-redshift', ]:
+  package { [ 'gtk-redshift', ]:
     ensure     => installed,
   }
 
@@ -410,6 +408,7 @@ class ubuntu_sdc {
       'flac',
       'lame',
       'libavcodec-dev',
+      'libavcodec-extra',
       'libc6-dev',
       'libexpat1-dev',
       'libgl1-mesa-dev',
@@ -457,18 +456,18 @@ class ubuntu_sdc {
   package { 'i3':
     ensure     => installed,
   }
-  package { 'kubuntu-desktop':
+  package { [ 'kubuntu-desktop', 'language-pack-kde-en', ]:
     ensure     => installed,
   }
   package { 'xfce4':
     ensure     => installed,
   }
-  package { [ 'ubuntu-desktop', 'unity-tweak-tool', ]:
-    ensure     => installed,
-  }
-  package { 'unity-lens-shopping':
-    ensure     => absent,
-  }
+#  package { [ 'ubuntu-desktop', 'unity-tweak-tool', ]:
+#    ensure     => installed,
+#  }
+#  package { 'unity-lens-shopping':
+#    ensure     => absent,
+#  }
 
   ##############################################################################
   # Puppet.conf configured for dashboard reporting
@@ -794,10 +793,6 @@ class ubuntu_sdc::silverstone {
 #    hasrestart => true,
 #    require    => User['ps3mediaserver'],
 #  }
-
-  package { 'boinc':
-    ensure     => installed,
-  }
 
   file { '/etc/cron.daily/rollingsnap':
     mode       => '0755',
