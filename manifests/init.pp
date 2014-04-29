@@ -137,7 +137,7 @@ class ubuntu_sdc {
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
   file { '/etc/pam.d/common-session':
-    source     => "puppet:///modules/ubuntu_sdc/common/etc/pam.d/common-session.${lsbdistcodename}",
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/pam.d/common-session',
     mode       => '0644',
     require    => [ Package['libpam-encfs'], Package['encfs'] ],
   }
