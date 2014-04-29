@@ -709,12 +709,15 @@ class ubuntu_sdc {
   }
 }
 
-class ubuntu_sdc::devel {
+class ubuntu_sdc::nvidia {
 
   ##############################################################################
-  # Development Stuff only
+  # NVIDIA drivers
   ##############################################################################
 
+  package { 'nvidia-331-updates':
+    ensure     => installed,
+  }
 }
 
 class ubuntu_sdc::silverstone {
