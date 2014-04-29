@@ -603,30 +603,19 @@ class ubuntu_sdc {
   # LightDM conf to set Cinnamon as default and make login/logout scripts hot
   ##############################################################################
 
-  case $operatingsystemrelease {
-    /^13.10$/: {
-      file { '/etc/lightdm/lightdm.conf':
-        mode    => '0644',
-        source  => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm.conf.new_version',
-        require => [ File['/usr/local/bin'], Package['xterm'] ],
-      }
-      file { '/etc/lightdm/lightdm-kde-greeter.conf':
-        mode    => '0644',
-        source  => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm-kde-greeter.conf',
-        require => File['/etc/lightdm/lightdm-background.jpg'],
-      }
-      file { '/etc/lightdm/lightdm-background.jpg':
-        mode    => '0644',
-        source  => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm-background.jpg',
-      }
-    }
-    default: {
-      file { '/etc/lightdm/lightdm.conf':
-        mode    => '0644',
-        source  => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm.conf.old_version',
-        require => [ File['/usr/local/bin'], Package['cinnamon'] ],
-      }
-    }
+  file { '/etc/lightdm/lightdm.conf':
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm.conf',
+    require    => [ File['/usr/local/bin'], Package['xterm'] ],
+  }
+  file { '/etc/lightdm/lightdm-kde-greeter.conf':
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm-kde-greeter.conf',
+    require    => File['/etc/lightdm/lightdm-background.jpg'],
+  }
+  file { '/etc/lightdm/lightdm-background.jpg':
+    mode       => '0644',
+    source     => 'puppet:///modules/ubuntu_sdc/common/etc/lightdm/lightdm-background.jpg',
   }
   file { '/usr/share/desktop-base/profiles/kde-profile/share/config/ksplashrc':
     mode       => '0644',
