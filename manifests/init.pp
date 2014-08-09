@@ -682,31 +682,24 @@ class ubuntu_sdc {
   ##############################################################################
 
   file { '/usr/bin/truecrypt':
-    source     => 'puppet:///modules/ubuntu_sdc/common/usr/bin/truecrypt',
-    mode       => '0755',
+    ensure     => absent,
   }
 
   file { '/usr/bin/truecrypt-uninstall.sh':
-    source     => 'puppet:///modules/ubuntu_sdc/common/usr/bin/truecrypt-uninstall.sh',
-    mode       => '0754',
+    ensure     => absent,
   }
 
   file { '/usr/share/applications/truecrypt.desktop':
-    source     => 'puppet:///modules/ubuntu_sdc/common/usr/share/applications/truecrypt.desktop',
-    mode       => '0644',
+    ensure     => absent,
   }
 
   file { '/usr/share/pixmaps/truecrypt.xpm':
-    source     => 'puppet:///modules/ubuntu_sdc/common/usr/share/pixmaps/truecrypt.xpm',
-    mode       => '0644',
+    ensure     => absent,
   }
 
   file { '/usr/share/truecrypt':
-    ensure     => directory,
-    recurse    => true,
-    purge      => true,
-    mode       => '0644',
-    source     => 'puppet:///modules/ubuntu_sdc/common/usr/share/truecrypt',
+    ensure     => absent,
+    force      => yes,
   }
 }
 
