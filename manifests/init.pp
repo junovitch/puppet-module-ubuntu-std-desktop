@@ -37,7 +37,8 @@
 #
 # Prerequisites:
 # Get the 'apt' module - `puppet module install puppetlabs-apt`
-# Get the 'apt' module - `puppet module install puppetlabs-ntp`
+# Get the 'ntp' module - `puppet module install puppetlabs-ntp`
+# Get the 'collectd' module' - `puppet module install pdxcat-collectd`
 #
 # Also, if you are looking to use this you'll need multiple installer packages
 # that cannot be redistributed or you should be getting on your own from the
@@ -474,6 +475,44 @@ class ubuntu_sdc {
   file { '/etc/puppet/puppet.conf':
     content    => template('ubuntu_sdc/etc/puppet/puppet.conf.erb'),
     mode       => '0644',
+  }
+
+  ##############################################################################
+  # Host side configuration for graphite reporting
+  #  `puppet module install pdxcat-collectd`
+  ##############################################################################
+
+  class { '::collectd':
+    purge          => true,
+    recurse        => true,
+    purge_config   => true,
+    fqdnlookup     => false,
+    interval       => '60',
+  }
+  class { 'collectd::plugin::df':
+    mountpoints    => ['/^/media//'],
+    fstypes        => ['nfs','tmpfs','autofs','gpfs','proc','devpts','devtmpfs','encfs','udev'],
+    ignoreselected => true,
+  }
+  class { 'collectd::plugin::cpu':
+  }
+  class { 'collectd::plugin::disk':
+    disks          => ['/^dm/'],
+    ignoreselected => true
+  }
+  class { 'collectd::plugin::interface':
+    interfaces     => ['lo'],
+    ignoreselected => true
+  }
+  class { 'collectd::plugin::load':
+  }
+  class { 'collectd::plugin::memory':
+  }
+  class { 'collectd::plugin::uptime':
+  }
+  class { 'collectd::plugin::write_graphite':
+    graphitehost   => 'graphite',
+    graphiteport   => '2013',
   }
 
   ##############################################################################
