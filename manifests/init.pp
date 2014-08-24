@@ -676,31 +676,6 @@ class ubuntu_sdc {
     purge      => true,
     source     => 'puppet:///modules/ubuntu_sdc/common/usr/local/lib/pcsc',
   }
-
-  ##############################################################################
-  # Truecrypt binary and support files in place
-  ##############################################################################
-
-  file { '/usr/bin/truecrypt':
-    ensure     => absent,
-  }
-
-  file { '/usr/bin/truecrypt-uninstall.sh':
-    ensure     => absent,
-  }
-
-  file { '/usr/share/applications/truecrypt.desktop':
-    ensure     => absent,
-  }
-
-  file { '/usr/share/pixmaps/truecrypt.xpm':
-    ensure     => absent,
-  }
-
-  file { '/usr/share/truecrypt':
-    ensure     => absent,
-    force      => yes,
-  }
 }
 
 class ubuntu_sdc::nvidia {
