@@ -443,7 +443,7 @@ class ubuntu_sdc {
   if $operatingsystemrelease =~ /^14.04$/ {
     apt::ppa { 'ppa:gwendal-lebihan-dev/cinnamon-nightly': }
     package { 'cinnamon':
-      ensure   => latest,
+      ensure   => installed,
       require  => Apt::Ppa['ppa:gwendal-lebihan-dev/cinnamon-nightly'],
     }
   }
