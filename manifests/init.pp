@@ -314,7 +314,7 @@ class ubuntu_sdc {
   # Video Tools
   ##############################################################################
 
-  if $operatingsystemrelease =~ /^13.10$|^14.04$/ {
+  if $operatingsystemrelease =~ /^13.10$/ {
     # Install latest snapshot for Ubuntu version without a Handbrake 'release'.
     apt::ppa { 'ppa:stebbins/handbrake-snapshots': }
     package { [ 'handbrake-cli', 'handbrake-gtk', ]:
@@ -332,10 +332,12 @@ class ubuntu_sdc {
       ensure  => absent,
       backup  => false,
     }
-    apt::ppa { 'ppa:stebbins/handbrake-releases': }
-    package { [ 'handbrake-cli', 'handbrake-gtk', ]:
-      ensure   => latest,
-      require  => Apt::Ppa['ppa:stebbins/handbrake-releases'],
+    package { 'handbrake-gtk':
+      ensure  => purged,
+      before  => Package['handbrake'],
+    }
+    package { [ 'handbrake-cli', 'handbrake', ]:
+      ensure  => latest,
     }
   }
   package { [
